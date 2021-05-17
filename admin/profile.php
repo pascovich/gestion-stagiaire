@@ -40,10 +40,10 @@ if (isset($_POST['submitpwd'])) {
 		));
 		header('location:profile.php');
 		}else{
-			echo '2 passwords not merge';
+			$errors="les 2 passwords doivent coincider";
 		}
 	}else{
-		echo 'remplit tous les champs';
+		$errors = 'remplit tous les champs';
 	}
 	
 
@@ -212,6 +212,7 @@ if (isset($_POST['submitpwd'])) {
 						<div class="card-box height-100-p overflow-hidden">
 							<div class="profile-tab height-100-p">
 								<div class="tab height-100-p">
+								
 									<ul class="nav nav-tabs customtab" role="tablist">
 										
 										<li class="nav-item">
@@ -229,13 +230,21 @@ if (isset($_POST['submitpwd'])) {
 												<div class="container pd-0">
 												<h5 class="mb-20 h5 text-blue">Secrets Informations</h5>
 												<?php     
-                                $req->execute(array(
-                                'idc' => $_SESSION['user']['id']
-                                ));  
-                                $secret=$req->fetchAll(PDO::FETCH_OBJ);
-                                foreach($secret as $secrets):  
-                                ?>
+												$req->execute(array(
+												'idc' => $_SESSION['user']['id']
+												));  
+												$secret=$req->fetchAll(PDO::FETCH_OBJ);
+												foreach($secret as $secrets):  
+												?>
+
 													<div class="profile-task-list pb-30">
+													<!-- <?php if(isset($errors)):?>
+													<div class="alert alert-danger">
+														<?php while($errors): ?>
+														<p><?=$errors;?></p>
+														<?php endwhile; ?>
+													</div>
+													<?php endif;?> -->
 														<form action="profile.php" method="POST">
 															<div class="form-group">
 																<label for="password">Enter your secret number</label>
