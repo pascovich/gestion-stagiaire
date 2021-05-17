@@ -62,7 +62,7 @@
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
 				<a href="login.html">
-					<img src="vendors/images/deskapp-logo.svg" alt="">
+					<img src="vendors/images/stage.png" width="60%" alt="">
 				</a>
 			</div> -->
 			<div class="login-menu">
@@ -80,8 +80,10 @@
 				</div>
 				<div class="col-md-6 col-lg-5">
 					<div class="login-box bg-white box-shadow border-radius-10">
-						<div class="login-title">
-							<h2 class="text-center text-primary">Login To Updev stage management</h2>
+						<div class="login-title" align="center">
+						<img src="vendors/images/stage.png" width="40%" alt="">
+
+							<!-- <h2 class="text-center text-primary">Login To Updev stage management</h2> -->
 						</div>
 						<form action="loginn.php" method="post">
 							<div class="select-role">
@@ -96,7 +98,7 @@
 										<input type="radio" name="options" id="user">
 										<div class="icon"><img src="vendors/images/person.svg" class="svg" alt=""></div>
 										<span>I'm</span>
-										Stagiare
+										Stagiaire
 									</label>
 								</div>
 							</div>
