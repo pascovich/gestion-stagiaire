@@ -11,13 +11,42 @@
 <?php 
 
 if (isset($_POST['submitInfo'])) {
+	$username=htmlspecialchars($_POST['username']);
 	$nom=htmlspecialchars($_POST['nom']);
 	$postnom=htmlspecialchars($_POST['postnom']);
 	$email=htmlspecialchars($_POST['email']);
 	if (!empty($nom) && !empty($postnom) && !empty($email)) {
-		$modif=$db->prepare("UPDATE users SET nom=:nom,postnom=:postnom,email=:emai;");
-
+		$modif=$db->prepare("UPDATE users SET nom=:nom,username=:username,postnom=:postnom,email=:email WHERE id=:idc");
+		$modif->execute(array(
+			':nom' => $nom,
+			':postnom' => $postnom,
+			':username' =>$username,
+			':email' => $email,
+			':idc' => $_SESSION['user']['id']
+		));
+		header('location:profile.php');
+      
 	}
+}
+if (isset($_POST['submitpwd'])) {
+	$pass=$_POST['password'];
+	$confirm=$_POST['confirm'];
+	if (!empty($pass) && !empty($confirm)) {
+		if ( $pass==$confirm) {
+			$mod=$db->prepare("UPDATE users SET password=:password WHERE id=:idc");
+			$mod->execute(array(
+			':password' => $pass,
+			':idc' => $_SESSION['user']['id']
+		));
+		header('location:profile.php');
+		}else{
+			echo '2 passwords not merge';
+		}
+	}else{
+		echo 'remplit tous les champs';
+	}
+	
+
 }
 
 
@@ -199,24 +228,30 @@ if (isset($_POST['submitInfo'])) {
 											<div class="pd-20 profile-task-wrap">
 												<div class="container pd-0">
 												<h5 class="mb-20 h5 text-blue">Secrets Informations</h5>
-													
+												<?php     
+                                $req->execute(array(
+                                'idc' => $_SESSION['user']['id']
+                                ));  
+                                $secret=$req->fetchAll(PDO::FETCH_OBJ);
+                                foreach($secret as $secrets):  
+                                ?>
 													<div class="profile-task-list pb-30">
-														<form action="">
+														<form action="profile.php" method="POST">
 															<div class="form-group">
 																<label for="password">Enter your secret number</label>
-																<input class="form-control form-control-lg" type="password" name="password" value="">
+																<input class="form-control form-control-lg" type="text" name="password" value="<?=$secrets->password;?>">
 															</div>
 															<div class="form-group">
 																<label for="confirm">confirm your secret number</label>
-																<input class="form-control form-control-lg" type="password" name="confirm" value="">
+																<input class="form-control form-control-lg" type="text" name="confirm" value="">
 															</div>
 															<div class="form-group mb-0">
-																<input type="submit" class="btn btn-primary" value="Update Password">
+																<input type="submit" class="btn btn-primary" name="submitpwd" value="Update Password">
 															</div>
 														</form>
 													</div>
 													<!-- Open Task End -->
-													
+													<?php endforeach; ?>
 												</div>
 											</div>
 										</div>
@@ -237,6 +272,7 @@ if (isset($_POST['submitInfo'])) {
 													<ul class="profile-edit-list row">
 														<li class="weight-500 col-md-6">
 															<h4 class="text-blue h5 mb-20">Edit Your Personal Information</h4>
+														<form action="profile.php" method="post">
 															<div class="form-group">
 																<label>UserName</label>
 																<input class="form-control form-control-lg" name="username" id="username" value="<?=$infos->username;?>" type="text">
@@ -265,6 +301,7 @@ if (isset($_POST['submitInfo'])) {
 															<div class="form-group mb-0">
 																<input type="submit"  name="submitInfo" class="btn btn-primary" value="Update Information">
 															</div>
+														</form>
 														</li>
 														<li class="weight-500 col-md-6">
 															<h4 class="text-blue h5 mb-20">Edit Social Media links</h4>
