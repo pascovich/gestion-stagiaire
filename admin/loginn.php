@@ -6,7 +6,7 @@
   	  $username = htmlspecialchars($_POST['username']);
   	  $password = htmlspecialchars($_POST['password']);
 
-  	  $requete = $db->prepare("SELECT * FROM users WHERE username=:username OR gmail=:username AND password=:password");
+  	  $requete = $db->prepare("SELECT * FROM users WHERE (username=:username OR email=:username) AND password=:password");
   	  $requete->execute(array(
       'username' => $username,
       'password' => $password
