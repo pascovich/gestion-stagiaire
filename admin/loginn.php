@@ -6,7 +6,7 @@
   	  $username = htmlspecialchars($_POST['username']);
   	  $password = htmlspecialchars($_POST['password']);
 
-  	  $requete = $db->prepare("SELECT * FROM users WHERE username=:username AND password=:password");
+  	  $requete = $db->prepare("SELECT * FROM users WHERE username=:username OR gmail=:username AND password=:password");
   	  $requete->execute(array(
       'username' => $username,
       'password' => $password
@@ -15,7 +15,9 @@
   	   if ($res) {
   	   	$userr->con($res[0]->id);
   	   	header('location:index.php');
-  	   }
+  	   }else{
+			 $errors="username or password invalid";
+		 }
 
 
   }
@@ -58,16 +60,16 @@
 <body class="login-page">
 	<div class="login-header box-shadow">
 		<div class="container-fluid d-flex justify-content-between align-items-center">
-			<!-- <div class="brand-logo">
+			<div class="brand-logo">
 				<a href="login.html">
 					<img src="vendors/images/deskapp-logo.svg" alt="">
 				</a>
 			</div> -->
-			<!-- <div class="login-menu">
+			<div class="login-menu">
 				<ul>
 					<li><a href="register.html">Register</a></li>
 				</ul>
-			</div> -->
+			</div> 
 		</div>
 	</div>
 	<div class="login-wrap d-flex align-items-center flex-wrap justify-content-center">
@@ -98,6 +100,14 @@
 									</label>
 								</div>
 							</div>
+							<?php 
+							if (isset($errors)):?>
+								<div class="alert alert-danger">
+								<p><?=$errors?></p>
+								</div>
+							
+							
+							<?php endif; ?>
 							<div class="input-group custom">
 								<input type="text" name="username" class="form-control form-control-lg" placeholder="Username">
 								<div class="input-group-append custom">
@@ -105,11 +115,13 @@
 								</div>
 							</div>
 							<div class="input-group custom">
-								<input type="password" name="password" class="form-control form-control-lg" placeholder="**********">
+								<input type="password" name="password" id="password" value="" class="form-control form-control-lg" placeholder="**********">
+								
 								<div class="input-group-append custom">
-									<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
+									<span class="input-group-text"><i onclick="Afficher()" class="dw dw-eye"></i></span>
 								</div>
 							</div>
+							<!-- <input type="checkbox" onclick="Afficher()"> Afficher le mot de passe -->
 							<div class="row pb-30">
 								<div class="col-6">
 									<div class="custom-control custom-checkbox">
@@ -149,5 +161,25 @@
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
+	
+<script>
+	function Afficher()
+	{ 
+		var input = document.getElementById("password"); 
+		if (input.type === "password")
+		{ 
+		input.type = "text"; 
+		} 
+		else
+		{ 
+		input.type = "password"; 
+		} 
+	} 
+</script>
+
+
 </body>
 </html>
+
+<!-- <input type="password" value="1formatik" id="motdepasse">
+<input type="checkbox" onclick="Afficher()"> Afficher le mot de passe -->
