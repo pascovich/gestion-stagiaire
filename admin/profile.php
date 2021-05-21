@@ -270,12 +270,12 @@ if (isset($_POST['submitpwd'])) {
 											<div class="profile-setting">
 												<form action="profile.php" method="POST">
 												<?php     
-                                $req->execute(array(
-                                'idc' => $_SESSION['user']['id']
-                                ));  
-                                $info=$req->fetchAll(PDO::FETCH_OBJ);
-                                foreach($info as $infos):  
-                                ?>
+													$req->execute(array(
+													'idc' => $_SESSION['user']['id']
+													));  
+													$info=$req->fetchAll(PDO::FETCH_OBJ);
+													foreach($info as $infos):  
+													?>
                             
 
 													<ul class="profile-edit-list row">
@@ -352,11 +352,19 @@ if (isset($_POST['submitpwd'])) {
 					</div>
 				</div>
 			</div>
+
+			<!-- <button type="button" class="btn btn-success btn-fw" onclick="showSuccessToast()">Success</button>
+<button type="button" class="btn btn-info btn-fw" onclick="showInfoToast()">Info</button>
+<button type="button" class="btn btn-warning btn-fw" onclick="showWarningToast()">Warning</button>
+<button type="button" class="btn btn-danger btn-fw" onclick="showDangerToast()">Danger</button> -->
+
 			<div class="footer-wrap pd-20 mb-20 card-box">
 				DeskManage By Pascovich kaluzi <a href="https://www.uptodatedevelopers.com" target="_blank">updev community </a>
 			</div>
 		</div>
 	</div>
+
+	
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
@@ -393,5 +401,20 @@ if (isset($_POST['submitpwd'])) {
 			});
 		});
 	</script>
+	<script>
+	$(document).ready(function(){
+	// 	$.toast({
+	// 	text:'hello',
+	// 	heading :'greet',
+	// 	showHideTransition:'slide',
+	// 	icon:'info'
+	// });
+	$.toast('Toast message to be shown');
+	});
+		
+	
+</script>
 </body>
 </html>
+
+

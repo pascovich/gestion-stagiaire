@@ -39,6 +39,8 @@ include 'partials/_link.php';
 <div class="card-box mb-30">
 					<div class="pd-20">
 						<h4 class="text-blue h4">Data presence</h4>
+<!-- <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg">Launch demo modal</a> -->
+
 					</div>
           <div class="row">
           <div class="col-md-2">
@@ -46,94 +48,43 @@ include 'partials/_link.php';
                 <i class="fa fa-plus">Add Presence</i> 
             </button>
           </div>
-          <div class="col-md-10">
-            
-          
-          <form action="presence.php" method="POST">
-            <div class="row">
-                <div class="col-md-4">
-                <div class="form-group">
-                               
-                  <select name="nom" class="select2" style="width: 100%;">
-                  <option value=""></option>
-                  <?php while($rech=$selection->fetch()) { ?> 
-                  
-                    <option value="<?=$rech['FirstName'];?>"><?=$rech['FirstName'];?></option>
-                    <!-- <option>DESC</option> -->
-                    <?php } ?>
-                  </select>
-                  
-                </div>
-                
-                </div>
-                <div class="col-md-4">
-                <input type="date" id="dateP" name="dateP" class="form-control" width="100">
-
-                </div>
-
-                <div class="col-md-4">
-                    
-                    <button type="submit" class="btn btn-primary" id="filtre" name="filtre"><i class="fa fa-filter">filter</i></button>
-                    <button type="submit" class="btn btn-primary" id="all" name="all"><i class="fa fa-sync-alt">refresh</i></button>
-
-                  <a href="fpdf/tutorial/presencefiles.php?nom=<?=$_POST['nom']?>&datee=<?=$_POST['dateP'] ?>" target="_blank" class="btn btn-info btn-lg"><i class="fa fa-print"></i></a>     
-                   
-                </div>
-            </div>
-  
-          </form>
-          
-          </div>
-      </div>
+        
+        </div>
 					<div class="pb-20">
 						<table class="table hover multiple-select-row data-table-export nowrap">
 							<thead>
 								<tr>
 									<th>#</th>
 									<th>Nom</th>
-									<th>Etat</th>
-									<th>Date</th>
+                  <th>Voir</th>
+									<!-- <th>Etat</th> -->
+								
 								
 									
 								</tr>
 							</thead>
 							<tbody>
               <?php 
-
-              if (isset($_POST['filtre'])) {
-                $donne=$_POST['dateP'];
-                $donn2=$_POST['nom'];
-                $reqq=$db->query("SELECT * FROM presence WHERE nom='$donn2' OR datePresence='$donne'");
-
-                $res=$reqq->fetchAll(PDO::FETCH_OBJ);
-
-                if(count($res)>0){
-                  foreach($res as $row):?>
-                  <tr>
-                    <td><?= $row->id; ?></td>
-                    <td><?= $row->nom; ?></td>
-                      <td class="badge badge-<?php if($row->etat=='present'){echo("primary");}elseif($row->etat=='abscent'){echo("danger");}else{echo('warning');} ?>"><?= $row->etat ?></td>
-                    <td><?= $row->datePresence; ?></td>
-                    <!-- <td><a href="fpdf/tutorial/tuto5.php" class="btn btn-info btn-lg"><i class="fa fa-print"></i></a></td> -->
-                  </tr>
-                  <?php endforeach;?>
-                 <?php }?>
-                 <?php }elseif(isset($_POST['all'])){ 
+              
                   $en=$db->query("SELECT * FROM presence");
                   $en->execute();
                   while($result=$en->fetch()){
 
                   ?>
+
+
+
                     <tr>
                       <td><?= $result['id'] ?></td>
                       <td><?= $result['nom'] ?></td>
-                      <td class="badge badge-<?php if($result['etat']=='present'){echo("primary");}elseif($result['etat']=='abscent'){echo("danger");}else{echo('warning');} ?>"><?= $result['etat'] ?></td>
-                      <td><?= $result['datePresence'] ?></td>
+                      <!-- <td><button class="btn btn-success view" id="<?= $result['id'] ?>"><i class="fa fa-eye"></i> </button></td> -->
+                      <!-- <td><button class="btn btn-success view" data-toggle="modal" data-target="#viewmodal" id="<?= $result['id'] ?>"><i class="fa fa-eye"></i> </button></td> -->
+                      <td><a href="show.php?nom=<?= $result['nom'] ?>" class="btn btn-primary">
+                      <i class="fa fa-eye"></i></a>
+                </td>
                       <!-- <td><a href="fpdf/tutorial/tuto5.php" class="btn btn-info btn-lg"><i class="fa fa-print"></i></a></td> -->
                     </tr>
 
-                    <?php } }else{?>
-                      <tr><td colspan="4">No data in this filter</td></tr>
                     <?php } ?>
 							</tbody>
 						</table>
@@ -184,12 +135,12 @@ include 'partials/_link.php';
             </div>
             
             <div class="form-group">
-                <!-- <label for="datePresence">Date de presence</label>
+                <label for="datePresence">Date de presence</label>
                 <div class="input-group date mg-check-in">
                   <div class="input-group-addon"><i class="far fa-calendar-alt"></i></div>
                   <input class="form-control" type="text" name="datePresence" id="datePresence" placeholder="date de pesence" autocomplete="off">
-                </div> -->
-                <input type="date" id="datePresence" name="datePresence" class="form-control">
+                </div>
+                <!-- <input type="date" id="datePresence" name="datePresence" class="form-control"> -->
             </div>
             <div class="form-group">
                 <select name="etat" class="form-control" id="etat">
@@ -215,7 +166,87 @@ include 'partials/_link.php';
   </div>
 </div>
 
-<!-- ending of modal -->
+
+<!-- // modal of information -->
+<!-- 
+<div class="col-md-4 col-sm-12 mb-30">
+              <div class="pd-20 card-box height-100-p">
+                <h5 class="h4">Information de </h5> -->
+               
+                <div class="modal fade bs-example-modal-lg " id="viewmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      </div>
+                      <form action="" method="post" >
+                      <div class="modal-body">
+                      
+                      <input type="text" id="user_id" class="form-control">
+                      <!-- debut de form wizard -->
+                    
+                      <div class="wizard-content">
+                          <form class="tab-wizard wizard-circle wizard" method="" action="">
+                            <h5>Rapport de Pascovich</h5>
+                            <input type="text" id="id" name="id">
+                            <input type="text" id="nom" name="nom">
+                            <div class="row">
+                                  <div class="col-md-4">
+                                      <input type="date" name="dateStage" class="form-control" placeholder="09/09/9090">
+                                  </div>
+                                  <div class="col-md-4">
+                                  <input type="date" name="dateStage" class="form-control" placeholder="to 09/09/2019">
+                                
+                                  </div>
+                                  <div class="col-md-4">
+                                  <input type="text" class="form-control" name="nom" id="nom">
+
+                                  </div>
+                    
+                            </div>
+                  
+                          </form><br>
+                          <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                  <th>#</th>
+                                  <th>Date</th>
+                                  <th>Status presence</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table">
+                            <tr>
+                                <td>1</td>
+                                <td>12/12/2017</td>
+                                <td>premier</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>12/12/2017</td>
+                                <td>deuxieme</td>
+                            </tr>
+                        </tbody>
+                    </table>
+           
+					</div>
+                      <!-- end de form wizard -->
+                        
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              <!-- </div>
+					</div> -->
+
+
+
+<!-- // end modal of information -->
+
   <!-- Bootstrap core JavaScript -->
   <?php include 'partials/_script.php'; ?>
 <script>
@@ -227,12 +258,41 @@ include 'partials/_link.php';
                 text:'record has been insert'
             });
         });
-    });
+        
+    
+    $(document).on('click', '.view', function(){
+      // $('#viewmodal').modal('show');
+
+		var id = $(this).attr("id");
+		$.ajax({
+			url:"fetch_single.php",
+			method:"POST",
+			data:{id:id},
+			dataType:"json",
+			success:function(data)
+			{
+				// $('#viewmodal').modal('show');
+				$('#id').val(id);
+				$('#nom').val(data.nom);
+				// $('.modal-title').text("Edit User");
+				// $('#user_id').val(user_id);
+				// $('#user_uploaded_image').html(data.user_image);
+				// $('#action').val("Edit");
+				// $('#operation').val("Edit");
+			}
+		});
+	});
+});
   </script>
 <script>
 
 
-$('document').ready(function(e){
+$(document).ready(function(e){
+        // $('.view').on('click',function(){
+        //   var stage=$('this').attr('id');
+
+        // });
+
     $('#forme').on('submit',function(e){
         e.preventDefault();
         var nom=$('#nom').val();
